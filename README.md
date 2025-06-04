@@ -1,15 +1,15 @@
 # spotify-preview-finder 🎧
 
-Get Spotify song preview URLs along with song details — even when `preview_url` is not directly provided by the Spotify API!
+Get Spotify song preview URLs along with song details — even when the preview URL isn't available via the Spotify API directly.
 
 ---
 
 ## 🚀 Features
 
 - 🔍 Search for any song by name
-- 🎵 Get Spotify URL + preview stream URLs from the page
-- 🧠 Uses `spotipy` for Spotify API
-- 🕷️ Falls back to scraping `p.scdn.co` links from the Spotify web page
+- 🎵 Get Spotify track link + preview stream URLs from the HTML
+- 🧠 Uses Spotipy for Spotify API
+- 🔧 Now requires you to **explicitly provide** `client_id` and `client_secret`
 
 ---
 
