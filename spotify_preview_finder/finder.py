@@ -44,14 +44,25 @@ def search_and_get_links(song_name, client_id, client_secret, limit=5):
         final_results = []
 
         for track in results['tracks']['items']:
-            name = f"{track['name']} - {', '.join([a['name'] for a in track['artists']])}"
+            name = track['name']
+            artist = ', '.join([a['name'] for a in track['artists']])
+            album_name = track['album']['name']
+            album_art = track['album']['images'][0]['url'] if track['album']['images'] else None
             spotify_url = track['external_urls']['spotify']
-            preview_urls = get_preview_urls_from_html(spotify_url)
+            preview_url = track.get('preview_url')
+
+            # Fallback to scraping if preview_url not provided
+            if not preview_url:
+                preview_urls = get_preview_urls_from_html(spotify_url)
+                preview_url = preview_urls[0] if preview_urls else None
 
             final_results.append({
                 "name": name,
-                "spotifyUrl": spotify_url,
-                "previewUrls": preview_urls
+                "artist": artist,
+                "album": album_name,
+                "albumArt": album_art,
+                "previewUrl": preview_url,
+                "spotifyUrl": spotify_url
             })
 
         return {
