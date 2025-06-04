@@ -1,18 +1,11 @@
-import os
 import requests
 from bs4 import BeautifulSoup
 from spotipy.oauth2 import SpotifyClientCredentials
 import spotipy
-from dotenv import load_dotenv
 
-load_dotenv()
-
-def create_spotify_client():
-    client_id = os.getenv("SPOTIFY_CLIENT_ID")
-    client_secret = os.getenv("SPOTIFY_CLIENT_SECRET")
-
+def create_spotify_client(client_id, client_secret):
     if not client_id or not client_secret:
-        raise ValueError("SPOTIFY_CLIENT_ID and SPOTIFY_CLIENT_SECRET must be set in .env")
+        raise ValueError("You must provide both client_id and client_secret.")
 
     credentials = SpotifyClientCredentials(client_id=client_id, client_secret=client_secret)
     return spotipy.Spotify(auth_manager=credentials)
@@ -33,12 +26,12 @@ def get_preview_urls_from_html(url):
     except Exception as e:
         raise RuntimeError(f"Error fetching preview URLs: {e}")
 
-def search_and_get_links(song_name, limit=5):
+def search_and_get_links(song_name, client_id, client_secret, limit=5):
     try:
         if not song_name:
             raise ValueError("Song name is required")
 
-        spotify = create_spotify_client()
+        spotify = create_spotify_client(client_id, client_secret)
         results = spotify.search(q=song_name, limit=limit, type='track')
 
         if not results['tracks']['items']:
